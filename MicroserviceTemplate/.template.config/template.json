@@ -1,0 +1,13 @@
+{
+	"$schema": "http://json.schemastore.org/template",
+	"author": "Ion Gritco",
+	"classifications":["Web", "API", "C#", "template"],
+	"identity":"CleanArchitecture.MicroserviceTemplate",
+	"name":"Clean architecture microservice template",
+	"shortname":"microservicetemplate",
+	"tags":{
+		"language":"C#",
+		"type":"project"
+	},
+	"sourceName": "MicroserviceTemplate"
+}
