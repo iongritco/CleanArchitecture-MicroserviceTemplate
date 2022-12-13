@@ -1,3 +1,5 @@
+[![.NET](https://github.com/iongritco/CleanArchitecture-MicroserviceTemplate/actions/workflows/dotnet.yml/badge.svg)](https://github.com/iongritco/CleanArchitecture-MicroserviceTemplate/actions/workflows/dotnet.yml)
+
 # CleanArchitecture microservice template
 A template for creating a new microservice with Clean Architecture - DDD, CQRS, MediatR, .NET 7, Entity Framework Core
 
