@@ -19,10 +19,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: 10.0.x
     - name: Restore dependencies
-      run: dotnet restore ./MicroserviceTemplate/MicroserviceTemplate.sln
+      run: dotnet restore ./MicroserviceTemplate/MicroserviceTemplate.slnx
     - name: Build
-      run: dotnet build ./MicroserviceTemplate/MicroserviceTemplate.sln --no-restore
+      run: dotnet build ./MicroserviceTemplate/MicroserviceTemplate.slnx --no-restore
     - name: Test
-      run: dotnet test ./MicroserviceTemplate/MicroserviceTemplate.sln --no-build --verbosity normal
+      run: dotnet test ./MicroserviceTemplate/MicroserviceTemplate.slnx --no-build --verbosity normal
