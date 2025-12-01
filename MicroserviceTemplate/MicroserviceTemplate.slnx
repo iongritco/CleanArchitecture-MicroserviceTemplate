@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Domain/">
+    <Project Path="src/Domain/MicroserviceTemplate.Application/MicroserviceTemplate.Application.csproj" />
+    <Project Path="src/Domain/MicroserviceTemplate.Domain/MicroserviceTemplate.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="src/Infrastructure/MicroserviceTemplate.Persistence/MicroserviceTemplate.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/Presentation/">
+    <Project Path="src/Presentation/MicroserviceTemplate.Server.REST/MicroserviceTemplate.Server.REST.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MicroserviceTemplate.UnitTest/MicroserviceTemplate.UnitTests.csproj" />
+  </Folder>
+</Solution>

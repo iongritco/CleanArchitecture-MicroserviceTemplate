@@ -7,7 +7,7 @@ using MicroserviceTemplate.Application.ToDo.Queries.GetToDoList;
 using MicroserviceTemplate.Persistence;
 using MicroserviceTemplate.Persistence.ToDo;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace MicroserviceTemplate.Server.REST
 {
