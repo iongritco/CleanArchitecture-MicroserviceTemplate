@@ -2,21 +2,20 @@
 using MicroserviceTemplate.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace MicroserviceTemplate.Persistence.ToDo
+namespace MicroserviceTemplate.Persistence.ToDo;
+
+public class ToDoQueryRepository : IToDoQueryRepository
 {
-    public class ToDoQueryRepository : IToDoQueryRepository
+    private readonly ToDoDataContext _toDoDataContext;
+
+    public ToDoQueryRepository(ToDoDataContext toDoDataContext)
     {
-        private readonly ToDoDataContext _toDoDataContext;
+        _toDoDataContext = toDoDataContext;
+        _toDoDataContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+    }
 
-        public ToDoQueryRepository(ToDoDataContext toDoDataContext)
-        {
-            _toDoDataContext = toDoDataContext;
-            _toDoDataContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-        }
-
-        public async Task<IEnumerable<ToDoItem>> GetToDoList(string username)
-        {
-            return await _toDoDataContext.ToDoItems.Where(x => x.Username.Equals(username)).ToListAsync();
-        }
+    public async Task<IEnumerable<ToDoItem>> GetToDoList(string username)
+    {
+        return await _toDoDataContext.ToDoItems.Where(x => x.Username.Equals(username)).ToListAsync();
     }
 }

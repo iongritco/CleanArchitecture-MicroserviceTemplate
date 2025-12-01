@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 
-namespace MicroserviceTemplate.Application.ToDo.Queries.GetToDoList
+namespace MicroserviceTemplate.Application.ToDo.Queries.GetToDoList;
+
+public class GetToDoListQueryValidator : AbstractValidator<GetToDoListQuery>
 {
-    public class GetToDoListQueryValidator : AbstractValidator<GetToDoListQuery>
+    public GetToDoListQueryValidator()
     {
-        public GetToDoListQueryValidator()
-        {
-            RuleFor(x => x.Username).NotEmpty();
-        }
+        RuleFor(x => x.Username).NotEmpty();
     }
 }
 

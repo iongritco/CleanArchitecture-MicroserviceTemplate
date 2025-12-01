@@ -1,10 +1,9 @@
 ﻿
 using MicroserviceTemplate.Domain.Entities;
 
-namespace MicroserviceTemplate.Application.Interfaces
+namespace MicroserviceTemplate.Application.Interfaces;
+
+public interface IToDoQueryRepository
 {
-    public interface IToDoQueryRepository
-    {
-        Task<IEnumerable<ToDoItem>> GetToDoList(string username);
-    }
+    Task<IEnumerable<ToDoItem>> GetToDoList(string username);
 }

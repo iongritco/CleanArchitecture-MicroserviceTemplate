@@ -1,10 +1,9 @@
 ﻿
 using MicroserviceTemplate.Domain.Entities;
 
-namespace MicroserviceTemplate.Application.Interfaces
+namespace MicroserviceTemplate.Application.Interfaces;
+
+public interface IToDoCommandRepository
 {
-    public interface IToDoCommandRepository
-    {
-        Task CreateToDo(ToDoItem toDo);
-    }
+    Task CreateToDo(ToDoItem toDo);
 }

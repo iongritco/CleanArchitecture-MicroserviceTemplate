@@ -9,69 +9,68 @@ using MicroserviceTemplate.Persistence.ToDo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 
-namespace MicroserviceTemplate.Server.REST
+namespace MicroserviceTemplate.Server.REST;
+
+public class Startup
 {
-    public class Startup
+    private readonly IConfiguration _configuration;
+
+    public Startup(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
+    }
 
-        public Startup(IConfiguration configuration)
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllers();
+        services.AddDbContext<ToDoDataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ToDoDataConnection")));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetToDoListQuery).GetTypeInfo().Assembly));
+        services.AddValidatorsFromAssembly(typeof(GetToDoListQuery).GetTypeInfo().Assembly);
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationHandler<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceHandler<,>));
+        services.AddSwaggerGen(c =>
         {
-            _configuration = configuration;
-        }
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDo.API", Version = "v1" });
+        });
+        services.AddTransient<IToDoQueryRepository, ToDoQueryRepository>();
+        services.AddTransient<IToDoCommandRepository, ToDoCommandRepository>();
+    }
 
-        public void ConfigureServices(IServiceCollection services)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
         {
-            services.AddControllers();
-            services.AddDbContext<ToDoDataContext>(options => options.UseSqlServer(_configuration.GetConnectionString("ToDoDataConnection")));
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetToDoListQuery).GetTypeInfo().Assembly));
-            services.AddValidatorsFromAssembly(typeof(GetToDoListQuery).GetTypeInfo().Assembly);
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationHandler<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceHandler<,>));
-            services.AddSwaggerGen(c =>
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDo.API", Version = "v1" });
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDo API V1");
             });
-            services.AddTransient<IToDoQueryRepository, ToDoQueryRepository>();
-            services.AddTransient<IToDoCommandRepository, ToDoCommandRepository>();
+        }
+        else
+        {
+            app.UseHsts();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseCors(builder => builder.WithOrigins("*")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+
+        app.UseEndpoints(endpoints =>
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDo API V1");
-                });
-            }
-            else
-            {
-                app.UseHsts();
-            }
+            endpoints.MapControllers();
+        });
 
-            app.UseHttpsRedirection();
-            app.UseRouting();
-            app.UseCors(builder => builder.WithOrigins("*")
-                              .AllowAnyMethod()
-                              .AllowAnyHeader());
+        InitializeDatabase(app);
+    }
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            InitializeDatabase(app);
-        }
-
-        private void InitializeDatabase(IApplicationBuilder app)
+    private void InitializeDatabase(IApplicationBuilder app)
+    {
+        using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope())
         {
-            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope())
-            {
-                scope.ServiceProvider.GetRequiredService<ToDoDataContext>().Database.Migrate();
-            }
+            scope.ServiceProvider.GetRequiredService<ToDoDataContext>().Database.Migrate();
         }
     }
 }
